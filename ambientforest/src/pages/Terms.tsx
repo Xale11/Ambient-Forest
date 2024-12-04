@@ -1,5 +1,4 @@
 import { Spacer, VStack } from '@chakra-ui/react'
-import React from 'react'
 import Navbar from '../components/Navbar'
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from '../components/ui/accordion'
 import Footer from '../components/Footer'
