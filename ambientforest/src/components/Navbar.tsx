@@ -1,8 +1,8 @@
-import { HStack, Icon, Image, Text, VStack } from "@chakra-ui/react"
+import { HStack, Image, Text, VStack } from "@chakra-ui/react"
 import { Link, useLocation } from "react-router-dom"
 import forestOutline from "../assets/forestOutlineGold.png"
 import Logo from "./Logo"
-import { IoMdMenu } from "react-icons/io"
+import MenuDrawer from "./MenuDrawer"
 
 const Navbar = () => {
 
@@ -23,9 +23,7 @@ const Navbar = () => {
   return (
     <VStack pos={"fixed"} zIndex={999} w={"100vw"} bg={"--black"} h={{base: "5em",lg: "8em"}} justify={"center"} fontFamily={"Nazare"}>
       <Image pos={"absolute"} left={0} alt="Image of the Macclesfield Forest Outline" h={"100%"} src={forestOutline}/>
-      <Icon fontSize={"5xl"} display={{base: "flex", lg: "none"}} position={"absolute"} right={2}>
-        <IoMdMenu />
-      </Icon>
+      <MenuDrawer/>
       <HStack pos={"relative"} display={{base: "none", lg: "flex"}} w={"100%"} justify={"space-around"}>
         <Text letterSpacing={"1px"} fontSize={"xl"} textDecor={underline("/")} _hover={{textDecor: "underline"}}>
           <Link to={"/"}>HOME</Link>
