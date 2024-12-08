@@ -26,7 +26,7 @@ const MenuDrawer = () => {
             <IoMdMenu />
           </Icon>
         </DrawerTrigger>
-        <DrawerContent pos={"absolute"} left={0} top={0} bg={"--black"} overflowY={"hidden"}>
+        <DrawerContent pos={"fixed"} left={0} top={0} bg={"--black"} overflowY={"hidden"}>
           <DrawerBody>
             <DrawerCloseTrigger pos={"relative"} mb={2}/>
             <VStack h={"100vh"} gap={10} align={"start"} borderTop={"1px solid #AD974F"} pt={5} overflowY={"hidden"}>
