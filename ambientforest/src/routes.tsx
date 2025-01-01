@@ -16,7 +16,7 @@ export const routes = [
     element: <OurStory/>
   },
   {
-    path: "/shop",
+    path: "/shop/:type",
     element: <Shop/>
   },
   {
@@ -32,7 +32,7 @@ export const routes = [
     element: <Cart/>
   },
   {
-    path: "/product/:id",
+    path: "/product/:type/:id",
     element: <ProductPage/>
   },
 ]

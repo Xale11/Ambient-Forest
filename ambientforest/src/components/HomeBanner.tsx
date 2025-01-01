@@ -1,7 +1,12 @@
 import { HStack, Text } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
+import { BannnerMessages } from "../types/types"
 
-const HomeBanner = () => {
+interface Props {
+  bannerMessages: BannnerMessages
+}
+
+const HomeBanner = ({bannerMessages}: Props) => {
 
   const slideSpeed = 3500
 
@@ -32,23 +37,19 @@ const HomeBanner = () => {
     }
   }, [slideNum])
 
-  
-
-  console.log(slideVal)
-
   return (
     <HStack w={"100%"} bg={"--gold"} h={"10em"} mb={5} justify={{base: "start", sm: "center"}} gap={{base: 0, sm: 0}}>
       <Text w={{base: "100vw", sm: "20%"}} fontSize={{base: "xs", lg: "lg"}} letterSpacing={"2px"} px={5} textAlign={"center"} flexShrink={0} transform={{base: `translateX(-${slideVal}vw)`, sm: "none"}} transition={"300ms all ease-in-out"}>
-        100% Wax soy candles
+        {bannerMessages?.msg1}
       </Text>
       <Text w={{base: "100vw", sm: "20%"}} fontSize={{base: "xs", lg: "lg"}} letterSpacing={"2px"} px={5} textAlign={"center"} flexShrink={0} transform={{base: `translateX(-${slideVal}vw)`, sm: "none"}} transition={"300ms all ease-in-out"}>
-        Inspired by the seasons and peak district
+        {bannerMessages?.msg2}
       </Text>
       <Text w={{base: "100vw", sm: "20%"}} fontSize={{base: "xs", lg: "lg"}} letterSpacing={"2px"} px={5} textAlign={"center"} flexShrink={0} transform={{base: `translateX(-${slideVal}vw)`, sm: "none"}} transition={"300ms all ease-in-out"}>
-        Hand thrown vessel designed by local artisan
+        {bannerMessages?.msg3}
       </Text>
       <Text w={{base: "100vw", sm: "20%"}} fontSize={{base: "xs", lg: "lg"}} letterSpacing={"2px"} px={5} textAlign={"center"} flexShrink={0} transform={{base: `translateX(-${slideVal}vw)`, sm: "none"}} transition={"300ms all ease-in-out"}>
-        Crafted and tested for exceptional home fragrance
+        {bannerMessages?.msg4}
       </Text>
     </HStack>
   )

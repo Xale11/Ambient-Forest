@@ -2,8 +2,23 @@ import { Spacer, VStack } from '@chakra-ui/react'
 import Navbar from '../components/Navbar'
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from '../components/ui/accordion'
 import Footer from '../components/Footer'
+import { useEffect, useState } from 'react'
+import { TermsCondition } from '../types/types'
+import { fetchFromDynamoDB } from '../api/awsApi'
+import { useQuery } from '@tanstack/react-query'
 
 const Terms = () => {
+
+  const [terms, setTerms] = useState<TermsCondition[]>([])
+
+  const {data: pageData} = useQuery({queryKey: ["fetchTerms"], queryFn: () => fetchFromDynamoDB("/terms"), enabled: true})
+
+  useEffect(() => {
+    if (pageData?.Items){
+      setTerms(pageData.Items[0]?.terms ?? [])
+    }
+  }, [pageData])
+
   return (
     <VStack minH={"100vh"}>
       <Navbar/>
@@ -13,7 +28,7 @@ const Terms = () => {
             return (
               <AccordionItem key={i} value={item.title}>
                 <AccordionItemTrigger fontSize={"2xl"} px={2}>{item.title}</AccordionItemTrigger>
-                <AccordionItemContent px={5}>{item.text}</AccordionItemContent>
+                <AccordionItemContent px={5}>{item.content}</AccordionItemContent>
               </AccordionItem>
             )
           })}
@@ -24,32 +39,5 @@ const Terms = () => {
     </VStack>
   )
 }
-
-const terms = [
-  {
-    title: "Terms Of Use",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-  {
-    title: "Terms Of Sale",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-  {
-    title: "Company Details",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-  {
-    title: "UK Modern Slavery Act Discloure",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-  {
-    title: "Privacy & Cookie Policy",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-  {
-    title: "Privacy & Cookie Settings",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo asperiores repellat nam unde facilis, ad porro! Corporis, facilis. Labore veniam minus totam, alias non debitis consequuntur impedit ut qui maiores provident iure soluta itaque, sequi asperiores ducimus quam amet aut. Eaque et accusantium, facilis aliquid sequi rerum aperiam beatae ullam vitae vero minus laudantium ipsa suscipit dicta omnis commodi eligendi. Officiis quaerat nemo fugiat in ab fuga provident libero aperiam!"
-  },
-]
 
 export default Terms

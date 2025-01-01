@@ -3,15 +3,40 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ProductPageItem from '../components/ProductPageItem'
 import candle from "../assets/candle.png"
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Product } from '../types/types'
+import { getProductByTypeAndIdFromDynamoDB } from '../api/awsApi'
+import { useQuery } from '@tanstack/react-query'
 
 const ProductPage = () => {
+  
+  const { type, id } = useParams()
+
+  const [product, setProduct] = useState<Product>()
+
+  const {data: pageData, refetch: pageRefetch, isFetchedAfterMount} = useQuery({queryKey: ["fetchProductData"], queryFn: () => getProductByTypeAndIdFromDynamoDB(`${type}`, `${id}`), enabled: true})
+  
+  useEffect(() => {
+    if (pageData?.Item){
+      setProduct(pageData.Item)
+    }
+  }, [pageData])
+
+  useEffect(() => {
+    if (isFetchedAfterMount){
+      pageRefetch()
+    }
+  }, [id])
+
+  console.log(product)
+
   return (
     <VStack w={"100vw"} >
       <Navbar/>
       <VStack w={"100%"} gap={10} mt={{base: "6em", lg: "10em"}} mb={5}>
         {/* # TODO add ingredients disclosure */}
-        <ProductPageItem/>
+        <ProductPageItem product={product}/>
         <Heading size={"3xl"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>You Might Also Like</Heading>
         <HStack w={"100%"} justify={"center"} gap={{base: 10, lg: 14}} wrap={"wrap"}>
           {[1, 2, 3, 4].map((item) => {

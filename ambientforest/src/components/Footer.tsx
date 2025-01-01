@@ -5,8 +5,56 @@ import { Link } from "react-router-dom"
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5"
 import { FaFacebookF, FaLinkedin, FaPinterestP } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
+import { useEffect, useState } from "react"
+import { fetchFromDynamoDB } from "../api/awsApi"
+import { ContactPageData, TermsCondition } from "../types/types"
+import { useQuery } from "@tanstack/react-query"
+import { customRedirect } from "../utils/redirect"
 
 const Footer = () => {
+
+  const [footerData, setFooterData] = useState<ContactPageData>({
+    page: "contact",
+    email: "",
+    instagram: "",
+    linkedin: "",
+    location: "",
+    number: "",
+    pinterest: "",
+    twitter: "",
+    facebook: "",
+    tiktok: ""
+  })
+  const [terms, setTerms] = useState<TermsCondition[]>([])
+  
+  const {data: termsData} = useQuery({queryKey: ["fetchTerms"], queryFn: () => fetchFromDynamoDB("/terms"), enabled: true})
+  const {data: pageData} = useQuery({queryKey: ["fetchFooterData"], queryFn: () => fetchFromDynamoDB("/contact"), enabled: true})
+
+  
+
+  useEffect(() => {
+    if (termsData?.Items){
+      setTerms(termsData.Items[0]?.terms ?? [])
+    }
+  }, [termsData])
+
+  useEffect(() => {
+    if (pageData?.Items){
+      setFooterData(pageData.Items[0] ?? {
+        page: "contact",
+        email: "",
+        instagram: "",
+        linkedin: "",
+        location: "",
+        number: "",
+        pinterest: "",
+        twitter: "",
+        facebook: "",
+        tiktok: ""
+      })
+    }
+  }, [pageData])
+
   return (
     <VStack w={"100%"} bg={"--black"} gap={5} align={"start"} px={{base: 0, lg: 4, "2xl": "5em"}} pt={7} pb={5}>
       <HStack w={"100%"} align={"start"} justify={{base: "center", xl: "start"}} gap={{base: 3, lg: 7, xl: "10em"}} wrap={"wrap"}>
@@ -25,7 +73,7 @@ const Footer = () => {
             <Link to={"/ourstory"}>Our Story</Link>
           </Text>
           <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
-            <Link to={"/shop"}>Shop</Link>
+            <Link to={"/shop/candle"}>Shop</Link>
           </Text>
           <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
             <Link to={"/contact"}>Contact</Link>
@@ -41,35 +89,35 @@ const Footer = () => {
             <Icon size={"sm"}>
               <IoLocationOutline />
             </Icon>
-            <Text>Example, Milton Keynes, MK12</Text>
+            <Text>{footerData?.location}</Text>
           </HStack>
           <HStack _hover={{color: "--gold", cursor: "pointer"}}>
             <Icon size={"sm"}>
               <IoCallOutline />
             </Icon>
-            <Text>01524 333888</Text>
+            <Text>{footerData?.number}</Text>
           </HStack>
           <HStack _hover={{color: "--gold", cursor: "pointer"}}>
             <Icon size={"sm"}>
               <IoMailOutline />
             </Icon>
-            <Text wordBreak={"break-all"}>sampleemail@gmail.com</Text>
+            <Text wordBreak={"break-all"}>{footerData?.email}</Text>
           </HStack>
         </VStack>
 
         <VStack align={{base: "center", lg: "start"}} w={{base: "30%", lg: "auto"}}>
           <Heading size={{base: "sm", lg: "xl"}} fontFamily={"Novecento"} letterSpacing={"1px"} mb={2}>Social Media</Heading>
           <Stack flexDir={{base: "column", lg: "row"}} gap={5} fontSize={"lg"}>
-            <Span _hover={{color: "--gold", cursor: "pointer"}}>
+            <Span onClick={() => customRedirect(footerData?.facebook)} _hover={{color: "--gold", cursor: "pointer"}}>
               <FaFacebookF />
             </Span>
-            <Span _hover={{color: "--gold", cursor: "pointer"}}>
+            <Span onClick={() => customRedirect(footerData?.twitter)} _hover={{color: "--gold", cursor: "pointer"}}>
               <FaXTwitter />
             </Span>
-            <Span _hover={{color: "--gold", cursor: "pointer"}}>
+            <Span onClick={() => customRedirect(footerData?.linkedin)} _hover={{color: "--gold", cursor: "pointer"}}>
               <FaLinkedin />
             </Span>
-            <Span _hover={{color: "--gold", cursor: "pointer"}}>
+            <Span onClick={() => customRedirect(footerData?.pinterest)} _hover={{color: "--gold", cursor: "pointer"}}>
               <FaPinterestP />
             </Span>
           </Stack>
@@ -77,24 +125,13 @@ const Footer = () => {
 
       </HStack>
       <HStack w={"100%"} justify={"center"} wrap={"wrap"} gap={7}>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">Terms Of Use</Link>
-        </Text>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">Terms Of Sale</Link>
-        </Text>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">Company Details</Link>
-        </Text>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">UK Modern Slavery Act Disclosure</Link>
-        </Text>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">Privacy & Cookie Policy</Link>
-        </Text>
-        <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
-          <Link to="/terms">Privacy & Cookie Settings</Link>
-        </Text>
+        {terms?.map((term) => {
+          return (
+            <Text fontSize={{base: "xs", lg: "md"}} _hover={{color: "--gold"}}>
+              <Link to="/terms">{term.title}</Link>
+            </Text>
+          )
+        })}
       </HStack>
     </VStack>
   )

@@ -7,8 +7,28 @@ import { Button } from "../components/ui/button"
 import { IoCallOutline, IoMailOutline } from "react-icons/io5"
 import { Toaster, toaster } from "../components/ui/toaster"
 import { Field } from "../components/ui/field"
+import { fetchFromDynamoDB } from "../api/awsApi"
+import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
+import { ContactPageData } from "../types/types"
+import { customRedirect } from "../utils/redirect"
 
 const Contact = () => {
+
+  const [contactPage, setContactPage] = useState<ContactPageData>({
+    page: "contact",
+    email: "",
+    instagram: "",
+    linkedin: "",
+    location: "",
+    number: "",
+    pinterest: "",
+    twitter: "",
+    facebook: "",
+    tiktok: ""
+  })
+
+  const {data: pageData} = useQuery({queryKey: ["fetchContactData"], queryFn: () => fetchFromDynamoDB("/contact"), enabled: true})
 
   const copyContent = () => {
     toaster.create({
@@ -21,6 +41,14 @@ const Contact = () => {
     })
   }
 
+  useEffect(() => {
+      if (pageData?.Items){
+        setContactPage(pageData.Items[0])
+      }
+    }, [pageData])
+
+    console.log(contactPage)
+
   return (
     <VStack>
       <Navbar/>
@@ -29,16 +57,16 @@ const Contact = () => {
         <Heading size={"5xl"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>Get In Touch</Heading>
         <Text w={"100%"} textAlign={"center"} color={"black"}>Have any questions about our products? Please Use the contact form below.</Text>
         <HStack mt={5} gap={10}>
-          <Icon color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
+          <Icon onClick={() => customRedirect(`${contactPage.facebook}`)} color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
             <FaFacebookF />
           </Icon>
-          <Icon color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
+          <Icon onClick={() => customRedirect(`${contactPage.twitter}`)} color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
             <FaXTwitter />
           </Icon>
-          <Icon color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
+          <Icon onClick={() => customRedirect(`${contactPage.linkedin}`)} color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
             <FaLinkedin />
           </Icon>
-          <Icon color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
+          <Icon onClick={() => customRedirect(`${contactPage.pinterest}`)} color={"black"} size="lg" cursor={"pointer"} _hover={{color: "blackAlpha.400"}}>
             <FaPinterestP />
           </Icon>
         </HStack>
@@ -49,11 +77,11 @@ const Contact = () => {
           <Text fontSize={"sm"} w={"100%"} color={"black"} textAlign={{base: "center", lg: "start"}}>Have any questions about our products? Please Use the contact form below.</Text>
           <Button onClick={() => copyContent()} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
             <IoCallOutline />
-            <Text letterSpacing={"1px"}>01524 333888</Text>
+            <Text letterSpacing={"1px"}>{contactPage.number}</Text>
           </Button>
           <Button onClick={() => copyContent()} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
             <IoMailOutline />
-            <Text letterSpacing={"1px"}>sampleemail@gmail.com</Text>
+            <Text letterSpacing={"1px"}>{contactPage.email}</Text>
           </Button>
         </VStack>
         <VStack p={4} w={{base: "95%", lg: "60%"}} bg={"--black"} align={"start"}>

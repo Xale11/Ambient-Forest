@@ -37,7 +37,7 @@ const MenuDrawer = () => {
                 <Link to={"/ourstory"}>OUR STORY</Link>
               </Text>
               <Text letterSpacing={"1px"} fontSize={"xl"} textDecor={underline("/shop")} _hover={{textDecor: "underline"}}>
-                <Link to={"/shop"}>SHOP</Link>
+                <Link to={"/shop/candle"}>SHOP</Link>
               </Text>
               <Text letterSpacing={"1px"} fontSize={"xl"} textDecor={underline("/contact")} _hover={{textDecor: "underline"}}>
                 <Link to={"/contact"}>CONTACT</Link>
