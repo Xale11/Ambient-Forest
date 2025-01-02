@@ -69,7 +69,7 @@ const ProductPage = () => {
               return (
                 <VStack key={item} border={"1px solid #AD974F"} w={{base: "40%", lg: "20%"}} >
                   <Link to={"/product/candle2"}>
-                    <Image h={"80%"} aspectRatio={"1/1"}  objectFit={"contain"} src={candle} alt="Image of candle/tealight/giftset for sale"/>
+                    <Image w={"100%"} aspectRatio={"1/1"}  objectFit={"contain"} src={candle} alt="Image of candle/tealight/giftset for sale"/>
                     <VStack w={"100%"} bg={"--gold"} gap={0} py={1}>
                       <Heading size={{base: "lg", xl: "2xl"}} letterSpacing={"1px"} fontFamily={"Nazare"} >Winter Forest</Heading>
                       <Text fontSize={{base: "md", xl: "xl"}}>£79.99 GBP</Text>

@@ -64,7 +64,7 @@ const HomeProducts = ({ title, bannerProducts }: Props) => {
       </Link>}
       {!currentProduct?.productId && <Link to={`/shop/candle`} style={{width: "100%", position: "relative"}}>
         <Image w={"100%"} objectFit={"contain"} aspectRatio={"1/1"} filter={"blur(8px)"} src={candle} alt="Image of candles for sale"/>
-        <Heading fontFamily={"Nazare"} size={"3xl"} w={"fit-content"} h={"min-content"} position={"absolute"} left={0} right={0} top={0} bottom={0} m={"auto"} >Coming Soon</Heading>
+        <Heading textAlign={"center"} fontFamily={"Nazare"} size={"3xl"} w={"fit-content"} h={"min-content"} position={"absolute"} left={0} right={0} top={0} bottom={0} m={"auto"} >Coming Soon</Heading>
       </Link>}
       
       <HStack w={"100%"}>
