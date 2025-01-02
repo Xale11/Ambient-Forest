@@ -56,8 +56,6 @@ const HomeProducts = ({ title, bannerProducts }: Props) => {
       showSeasonalProduct(slideNum)
     }, [slideNum])
 
-    console.log(currentProduct)
-
   return (
     <VStack w={{base: "30%", lg: "20%"}}>
       <Heading size={{base: "xl",lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>{title}</Heading>

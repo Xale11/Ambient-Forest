@@ -25,7 +25,7 @@ const Product = ({product}: Props ) => {
       <HStack w={"100%"} justify={"center"} gap={{base: 4, lg: 14}} px={{base: 4, lg: 10}} wrap={"wrap"}>
         <Box position={"relative"} w={{base: "45%", sm: "30%", lg: "20%"}} aspectRatio={"1/1"} borderRadius={"2xl"} border={"1px solid #AD974F"}>
           {product?.isSoldOut && <Box top={0} right={0} bg={"--black"} position={"absolute"} py={1.5} px={4} borderTopRightRadius={"2xl"}>Sold Out</Box>}
-          <Image w={"100%"} h={"100%"}  objectFit={"contain"} src={`${baseImageUrl}/${product?.mainImageUrl}`} alt="Image of candles for sale"/>
+          <Image w={"100%"} h={"100%"}  objectFit={"contain"} src={`${baseImageUrl}/${product?.mainImageUrl}`} alt={`Image of Ambient Forest ${product.productType}`}/>
         </Box>
         <VStack w={{base: "30%", lg: "20%"}} display={{base: "none", sm: "flex"}}>
           <Heading size={{base: "2xl", xl: "3xl"}} letterSpacing={"1px"} fontFamily={"Nazare"} color={"black"} display={{base: "none", lg: "flex"}}>{product?.name}</Heading>
