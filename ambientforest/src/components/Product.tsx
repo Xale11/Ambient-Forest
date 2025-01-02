@@ -23,7 +23,8 @@ const Product = ({product}: Props ) => {
   return (
     <Link to={`/product/${product?.productType}/${product?.productId}`}>
       <HStack w={"100%"} justify={"center"} gap={{base: 4, lg: 14}} px={{base: 4, lg: 10}} wrap={"wrap"}>
-        <Box w={{base: "45%", sm: "30%", lg: "20%"}} aspectRatio={"1/1"} borderRadius={"2xl"} border={"1px solid #AD974F"}>
+        <Box position={"relative"} w={{base: "45%", sm: "30%", lg: "20%"}} aspectRatio={"1/1"} borderRadius={"2xl"} border={"1px solid #AD974F"}>
+          {product?.isSoldOut && <Box top={0} right={0} bg={"--black"} position={"absolute"} py={1.5} px={4} borderTopRightRadius={"2xl"}>Sold Out</Box>}
           <Image w={"100%"} h={"100%"}  objectFit={"contain"} src={`${baseImageUrl}/${product?.mainImageUrl}`} alt="Image of candles for sale"/>
         </Box>
         <VStack w={{base: "30%", lg: "20%"}} display={{base: "none", sm: "flex"}}>
@@ -36,10 +37,10 @@ const Product = ({product}: Props ) => {
           <Heading display={{base: "block", lg: "none"}} size={"xl"} letterSpacing={"1px"} fontFamily={"Nazare"} color={"black"}>{product?.name}</Heading>
           <Heading display={{base: "block", lg: "none"}} size={"lg"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>£{(parseInt(product?.price ?? "0") / 100).toFixed(2)}</Heading>
           <Link to={"/cart"} style={{width: "100%"}}>
-            <Button onClick={() => addToBag(product)} w={"100%"} py={{base: 3, lg: 7}} bg={"--black"} color={"white"} fontSize={"sm"} _hover={{w: "14em"}} transition={"all 300ms ease-in-out"}>Add To Basket</Button>
+            <Button disabled={product?.isSoldOut} onClick={() => addToBag(product)} w={"100%"} py={{base: 3, lg: 7}} bg={"--black"} color={"white"} fontSize={"sm"} _hover={{w: "14em"}} transition={"all 300ms ease-in-out"}>Add To Basket</Button>
           </Link>
           <Link to={"/cart"} style={{width: "100%"}}>
-            <Button w={"100%"} py={{base: 3, lg: 7}} bg={"--gold"} fontSize={"sm"} _hover={{w: "14em"}} transition={"all 300ms ease-in-out"}>Buy Now</Button>
+            <Button disabled={product?.isSoldOut} w={"100%"} py={{base: 3, lg: 7}} bg={"--gold"} fontSize={"sm"} _hover={{w: "14em"}} transition={"all 300ms ease-in-out"}>Buy Now</Button>
           </Link>
         </VStack>
       </HStack>

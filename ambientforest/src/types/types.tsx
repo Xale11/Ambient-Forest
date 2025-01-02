@@ -28,6 +28,8 @@ export interface Product {
   createdAt: string,
   additionalImages: AdditionalImage[],
   clp: string
+  isSoldOut: boolean
+  hideProduct: boolean
 }
 
 export interface AdditionalImage {

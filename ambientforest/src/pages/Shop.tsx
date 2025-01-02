@@ -33,7 +33,7 @@ const Shop = () => {
   
     useEffect(() => {
       if (pageData?.Items){
-        setProducts(pageData.Items.filter((item: ProductType) => item.season === filter) ?? [])
+        setProducts(pageData.Items.filter((item: ProductType) => item.season === filter && item.hideProduct === false) ?? [])
       }
     }, [pageData, filter])
 
@@ -51,7 +51,7 @@ const Shop = () => {
       <MenuRoot positioning={{placement: "bottom"}}>
         <MenuTrigger _focus={{outline: "none", border: "none"}}>
         <HStack  gap={5} mt={{base: "6em", lg: "10em"}} align={"center"} justify={"center"}>
-          <Heading size={"5xl"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>Candles</Heading>
+          <Heading size={"5xl"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>{type}s</Heading>
           <Icon fontSize={"2xl"} color={"black"}>
             <FaChevronDown/>
           </Icon>
