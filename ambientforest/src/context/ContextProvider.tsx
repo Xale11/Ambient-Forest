@@ -1,7 +1,9 @@
 import { createContext, ReactNode, useEffect, useState } from "react"
 import { CartItem, LocalStorageCartData } from "../types/clientTypes"
-import { Product } from "../types/types"
+import { CartPageData, Product } from "../types/types"
 import { convertProductToCartItem } from "../utils/productHandling"
+import { fetchFromDynamoDB } from "../api/awsApi"
+import { useQuery } from "@tanstack/react-query"
 
 interface Props {
   children: ReactNode
@@ -13,6 +15,8 @@ export interface ContextData {
   addToBag: (value: Product | undefined) => void
   editQuantity: (item: CartItem, value: number) => void
   removeFromBag: (value: CartItem) => void
+  cartPage: CartPageData
+  cartPageLoading: boolean
   maxCartItems: number
 }
 
@@ -23,6 +27,13 @@ const ContextProvider = ({children}: Props) => {
   const maxCartItems = 7
 
   const [cart, setCart] = useState<CartItem[]>([])
+
+  const {data: cartPageData, isFetching: cartPageLoading} = useQuery({queryKey: ["fetchCartData"], queryFn: () => fetchFromDynamoDB("/cart"), enabled: true})
+
+  const [cartPage, setCartPage] = useState<CartPageData>({
+    page: "cart",
+    deliveryOptions: []
+  })
 
   const addToBag = (product: Product | undefined) => {
     if (!product) return
@@ -105,8 +116,17 @@ const ContextProvider = ({children}: Props) => {
     fetchCartFromLocalStorage()
   }, [])
 
+  useEffect(() => {
+    if (cartPageData?.Items){
+      setCartPage(cartPageData.Items[0] ?? {
+        page: "cart",
+        deliveryOptions: []
+      })
+    }
+  }, [cartPageData])
+
   return (
-    <ContextAPI.Provider value={{cart, setCart, addToBag, editQuantity, removeFromBag, maxCartItems}}>
+    <ContextAPI.Provider value={{cart, setCart, cartPage, cartPageLoading, addToBag, editQuantity, removeFromBag, maxCartItems}}>
       {children}
     </ContextAPI.Provider>
   )

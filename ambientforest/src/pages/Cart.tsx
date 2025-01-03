@@ -4,10 +4,8 @@ import paymentOptions from "../assets/paymentOptions.png"
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import Footer from "../components/Footer"
-import { CartPageData, ShippingRate } from "../types/types"
-import { useContext, useEffect, useState } from "react"
-import { fetchFromDynamoDB } from "../api/awsApi"
-import { useQuery } from "@tanstack/react-query"
+import { ShippingRate } from "../types/types"
+import { useContext } from "react"
 import { ContextAPI, ContextData } from "../context/ContextProvider"
 import CartProduct from "../components/CartProduct"
 import { Tooltip } from "../components/ui/tooltip"
@@ -20,14 +18,8 @@ const Cart = () => {
 
   const canonicalUrl = import.meta.env.VITE_DOMAIN
 
-  const { cart } = useContext(ContextAPI) as ContextData
+  const { cart, cartPage, cartPageLoading } = useContext(ContextAPI) as ContextData
 
-  const [cartPage, setCartPage] = useState<CartPageData>({
-    page: "cart",
-    deliveryOptions: []
-  })
-
-  const {data: pageData, isFetching: pageLoading} = useQuery({queryKey: ["fetchCartData"], queryFn: () => fetchFromDynamoDB("/cart"), enabled: true})
 
   const checkoutCart = async () => {
     const lineItems = [...cart].map((lineItem) => lineItem.lineItem)
@@ -36,14 +28,6 @@ const Cart = () => {
     window.open(url, "_self")
   }
 
-  useEffect(() => {
-    if (pageData?.Items){
-      setCartPage(pageData.Items[0] ?? {
-        page: "cart",
-        deliveryOptions: []
-      })
-    }
-  }, [pageData])
 
 
   return (
@@ -81,7 +65,7 @@ const Cart = () => {
               </HStack>
             </VStack>
             <Link to={"/cart"} style={{width: "100%"}}>
-              <Button onClick={checkoutCart} disabled={cart.length == 0 || pageLoading ? true : false} w={"100%"} color={"white"} bg={"--black"} transition={"all 300ms ease-in-out"} _hover={{textDecoration: "underline"}}>
+              <Button onClick={checkoutCart} disabled={cart.length == 0 || cartPageLoading ? true : false} w={"100%"} color={"white"} bg={"--black"} transition={"all 300ms ease-in-out"} _hover={{textDecoration: "underline"}}>
                 Checkout
               </Button>
             </Link>

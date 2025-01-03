@@ -10,6 +10,7 @@ import { fetchFromDynamoDB } from "../api/awsApi"
 import { ContactPageData, TermsCondition } from "../types/types"
 import { useQuery } from "@tanstack/react-query"
 import { customRedirect } from "../utils/redirect"
+import { toaster } from "./ui/toaster"
 
 const Footer = () => {
 
@@ -30,7 +31,17 @@ const Footer = () => {
   const {data: termsData} = useQuery({queryKey: ["fetchTerms"], queryFn: () => fetchFromDynamoDB("/terms"), enabled: true})
   const {data: pageData} = useQuery({queryKey: ["fetchFooterData"], queryFn: () => fetchFromDynamoDB("/contact"), enabled: true})
 
-  
+  const copyContent = (value: string) => {
+    navigator.clipboard.writeText(value);
+    toaster.create({
+      title: "Copied To Clipboard",
+      type: "success",
+      action: {
+        label: "close",
+        onClick: () => {return},
+      }
+    })
+  }
 
   useEffect(() => {
     if (termsData?.Items){
@@ -81,23 +92,26 @@ const Footer = () => {
           <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
             <Link to={"/cart"}>Cart</Link>
           </Text>
+          <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
+            <Link to={"/terms"}>Terms</Link>
+          </Text>
         </VStack>
 
         <VStack align={{base: "center", lg: "start"}} w={{base: "30%", lg: "auto"}} fontSize={{base: "xs", lg: "md"}}>
           <Heading size={{base: "sm", lg: "xl"}} fontFamily={"Novecento"} letterSpacing={"1px"} mb={2}>Contacts</Heading>
-          <HStack _hover={{color: "--gold", cursor: "pointer"}}>
+          <HStack onClick={() => copyContent(footerData?.location ?? "")} _hover={{color: "--gold", cursor: "pointer"}}>
             <Icon size={"sm"}>
               <IoLocationOutline />
             </Icon>
             <Text>{footerData?.location}</Text>
           </HStack>
-          <HStack _hover={{color: "--gold", cursor: "pointer"}}>
+          <HStack onClick={() => copyContent(footerData?.number ?? "")} _hover={{color: "--gold", cursor: "pointer"}}>
             <Icon size={"sm"}>
               <IoCallOutline />
             </Icon>
             <Text>{footerData?.number}</Text>
           </HStack>
-          <HStack _hover={{color: "--gold", cursor: "pointer"}}>
+          <HStack onClick={() => copyContent(footerData?.email ?? "")} _hover={{color: "--gold", cursor: "pointer"}}>
             <Icon size={"sm"}>
               <IoMailOutline />
             </Icon>

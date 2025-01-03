@@ -68,10 +68,10 @@ const HomeProducts = ({ title, bannerProducts }: Props) => {
       </Link>}
       
       <HStack w={"100%"}>
-        <Box w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={"black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
-        <Box w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={"--gold"} _hover={{bg: "--gold", cursor: "pointer"}}/>
-        <Box w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={"black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
-        <Box w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={"black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
+        <Box onClick={() => setSlideNum(1)} w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={slideNum === 1 ? "--gold" : "black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
+        <Box onClick={() => setSlideNum(2)} w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={slideNum === 2 ? "--gold" : "black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
+        <Box onClick={() => setSlideNum(3)} w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={slideNum === 3 ? "--gold" : "black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
+        <Box onClick={() => setSlideNum(4)} w={"24%"} h={{base: "1px", lg: "1.5px"}} bg={slideNum >= 4 ? "--gold" : "black"} _hover={{bg: "--gold", cursor: "pointer"}}/>
       </HStack>
       <VStack gap={{base: 1, lg: 0}}>
         <Text onClick={() => setSlideNum(1)} color={slideNum === 1 ? "--gold" : "black"} fontSize={{base: "md", lg: "xl"}} letterSpacing={"1px"} _hover={{color: "--gold", cursor: "pointer"}}>Spring</Text>

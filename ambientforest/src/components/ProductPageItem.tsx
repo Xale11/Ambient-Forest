@@ -1,13 +1,17 @@
-import { Box, Heading, HStack, Image, Text, VStack } from "@chakra-ui/react"
+import { Box, Heading, HStack, Icon, Image, Text, VStack } from "@chakra-ui/react"
 import ProductColorNotes from "./ProductColorNotes"
 import { Link } from "react-router-dom"
 import { Button } from "./ui/button"
-import { Product } from "../types/types"
+import { Product, ShippingRate } from "../types/types"
 import { limitText } from "../utils/stringHandling"
 import ProductModal from "./ProductModal"
 import { useContext, useEffect, useState } from "react"
 import { ContextAPI, ContextData } from "../context/ContextProvider"
-import { isProductNew } from "../utils/productHandling"
+import { convertProductToCartItem, isProductNew } from "../utils/productHandling"
+import { CartItem } from "../types/clientTypes"
+import { goToCheckout } from "../stripe/stripe"
+import { convertDeliveryOptionToShippingRate } from "../utils/cartHandling"
+import { IoChevronBack, IoChevronForward } from "react-icons/io5"
 
 interface Props {
   product: Product | undefined
@@ -15,17 +19,68 @@ interface Props {
 
 const ProductPageItem = ({product}: Props) => {
 
-  const { addToBag } = useContext(ContextAPI) as ContextData
+  const { addToBag, cartPage } = useContext(ContextAPI) as ContextData
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   
   const baseImageUrl = import.meta.env.VITE_S3_URL
-
+  
   const [displayImage, setDisplayImage] = useState<string>(`${baseImageUrl}/${product?.mainImageUrl}`)
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  const [imageArray, setImageArray] = useState<string[]>([])
+
+  const incrementImageIndex = () => {
+    const newIndex = currentImageIndex + 1
+    if (newIndex >= imageArray.length){
+      setCurrentImageIndex(imageArray.length - 1)
+      setDisplayImage(`${baseImageUrl}/${imageArray[imageArray.length - 1]}`)
+    } else {
+      setCurrentImageIndex(newIndex)
+      setDisplayImage(`${baseImageUrl}/${imageArray[newIndex]}`)
+    }
+  }
+
+  const decrementImageIndex = () => {
+    const newIndex = currentImageIndex - 1
+    if (newIndex < 0){
+      setCurrentImageIndex(0)
+      setDisplayImage(`${baseImageUrl}/${imageArray[imageArray.length - 1]}`)
+    } else {
+      setCurrentImageIndex(newIndex)
+      setDisplayImage(`${baseImageUrl}/${imageArray[newIndex]}`)
+    }
+  }
+
+  const generateImageArray = () => {
+    let newArray: string[] = []
+    const addImagesArray: string[] = product?.additionalImages.map((img) => img.imageUrl) ?? []
+    if (product && product.secondaryImageUrl){
+      newArray = [product.mainImageUrl, product.secondaryImageUrl]
+      setImageArray([...newArray, ...addImagesArray])
+    } else {
+      if (product) {
+        newArray = [product.mainImageUrl]
+        setImageArray([...newArray, ...addImagesArray])
+      }
+    }
+
+  }
+
+  const handleBuyNow = async () => {
+    if (!product) return
+    const cartItem: CartItem = convertProductToCartItem(product)
+    const shippingRates: ShippingRate[] = [...cartPage.deliveryOptions].map((option) => convertDeliveryOptionToShippingRate(option))
+    const url = await goToCheckout([cartItem.lineItem], shippingRates)
+    window.open(url, "_self")
+  }
 
   useEffect(() => {
     setDisplayImage(`${baseImageUrl}/${product?.mainImageUrl}`)
+    setCurrentImageIndex(0)
+    generateImageArray()
   }, [product, baseImageUrl])
+
+  console.log(currentImageIndex)
 
   return (
     <HStack w={"90%"} h={{base: "unset", lg: "calc(100vh - 11em)"}} border={"1px solid #AD974F"} wrap={{base: "wrap", lg: "nowrap"}} >
@@ -41,10 +96,17 @@ const ProductPageItem = ({product}: Props) => {
           })}
         </HStack>
         <HStack display={{base: "flex", lg: "none"}}>
-          <Box borderRadius={"100%"} border={"1px solid black"} w={"7px"} aspectRatio={"1/1"}></Box>
-          <Box borderRadius={"100%"} border={"1px solid black"} w={"7px"} aspectRatio={"1/1"} bg={"black"}></Box>
-          <Box borderRadius={"100%"} border={"1px solid black"} w={"7px"} aspectRatio={"1/1"} bg={"black"}></Box>
-          <Box borderRadius={"100%"} border={"1px solid black"} w={"7px"} aspectRatio={"1/1"} bg={"black"}></Box>
+          <Icon onClick={decrementImageIndex} size={"xl"} color={"black"}>
+            <IoChevronBack />
+           </Icon> 
+           {imageArray.map((_, i) => {
+            return (
+              <Box borderRadius={"100%"} border={"1px solid black"} w={"7px"} aspectRatio={"1/1"} bg={i == currentImageIndex ? "white" : "black"}></Box>
+            )
+           })}
+          <Icon onClick={incrementImageIndex} size={"xl"} color={"black"}>
+            <IoChevronForward />
+           </Icon> 
         </HStack>
       </VStack>
 
@@ -65,11 +127,11 @@ const ProductPageItem = ({product}: Props) => {
               Add To Basket
             </Button>
           </Link>
-          <Link to={"/cart"} style={{width: "50%"}}>
-            <Button disabled={product?.isSoldOut} fontSize={"md"} bg={"--gold"} w={"100%"} transition={"all 300ms ease-in-out"}>
+          <Box w={"50%"}>
+            <Button onClick={handleBuyNow} disabled={product?.isSoldOut} fontSize={"md"} bg={"--gold"} w={"100%"} transition={"all 300ms ease-in-out"}>
               Buy Now
             </Button>
-          </Link>
+          </Box>
         </HStack>
         
         <VStack gap={0} w={"100%"} align={{base: "center", lg: "start"}}>
@@ -103,11 +165,11 @@ const ProductPageItem = ({product}: Props) => {
               Add To Basket
             </Button>
           </Link>
-          <Link to={"/cart"}>
-            <Button disabled={product?.isSoldOut} fontSize={"md"} bg={"--gold"} w={"13em"} _hover={{w: "15em"}} transition={"all 300ms ease-in-out"}>
+          <Box>
+            <Button onClick={handleBuyNow} disabled={product?.isSoldOut} fontSize={"md"} bg={"--gold"} w={"13em"} _hover={{w: "15em"}} transition={"all 300ms ease-in-out"}>
               Buy Now
             </Button>
-          </Link>
+          </Box>
         </HStack>
 
       </VStack>

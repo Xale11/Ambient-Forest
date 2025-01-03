@@ -13,11 +13,16 @@ import { useEffect, useState } from "react"
 import { ContactPageData } from "../types/types"
 import { customRedirect } from "../utils/redirect"
 import { Helmet } from "react-helmet"
+import axios from "axios"
 
 const Contact = () => {
 
   const canonicalUrl = import.meta.env.VITE_DOMAIN
 
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [name, setName] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [message, setMessage] = useState<string>("")
   const [contactPage, setContactPage] = useState<ContactPageData>({
     page: "contact",
     email: "",
@@ -32,8 +37,10 @@ const Contact = () => {
   })
 
   const {data: pageData} = useQuery({queryKey: ["fetchContactData"], queryFn: () => fetchFromDynamoDB("/contact"), enabled: true})
+  const { isFetching: formLoading, refetch: handleFormSubmit, status: formStatus, failureReason } = useQuery({queryKey: ["fetchContactData"], queryFn: () => submitForm(), enabled: false})
 
-  const copyContent = () => {
+  const copyContent = (value: string) => {
+    navigator.clipboard.writeText(value);
     toaster.create({
       title: "Copied To Clipboard",
       type: "success",
@@ -43,6 +50,58 @@ const Contact = () => {
       }
     })
   }
+
+  const submitForm = async () => {
+    setHasSubmitted(true)
+    if (!name){
+      throw new Error("Please Add A Name To The Form")
+    } else if (!email){
+      throw new Error("Please Add An Email To The Form")
+    } else if (!message){
+      throw new Error("Please Add A Message To The Form")
+    }
+  
+    const res = await axios.post("https://getform.io/f/agddwynb", {
+        message: name,
+        email: email,
+        name: name
+    },
+    { headers: {'Accept': 'application/json'}})
+    .then(response => response)
+    .catch(error => {
+      console.error(error)
+      throw new Error("There was a problem submitting your form. Please try again.")
+    })
+
+    return res
+  }
+
+  useEffect(() => {
+
+    if (hasSubmitted) {
+      if (formStatus === "error" && failureReason) {
+        toaster.create({
+          title: `${failureReason.message}`,
+          type: "error",
+          action: {
+            label: "close",
+            onClick: () => {},
+          },
+        });
+        setHasSubmitted(false)
+      } else if (!formLoading && formStatus === "success") {
+        toaster.create({
+          title: `Form Has Been Submitted`,
+          type: "success",
+          action: {
+            label: "close",
+            onClick: () => {},
+          },
+        });
+        setHasSubmitted(false)
+      }
+    }
+  }, [formLoading])
 
   useEffect(() => {
       if (pageData?.Items){
@@ -85,11 +144,11 @@ const Contact = () => {
           <VStack w={{base: "100%", lg: "40%"}} align={{base: "center", lg: "start"}}>
             <Heading size={{base: "3xl", lg: "5xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>Contact Details</Heading>
             <Text fontSize={"sm"} w={"100%"} color={"black"} textAlign={{base: "center", lg: "start"}}>Have any questions about our products? Please Use the contact form below.</Text>
-            <Button onClick={() => copyContent()} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
+            <Button onClick={() => copyContent(contactPage.number)} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
               <IoCallOutline />
               <Text letterSpacing={"1px"}>{contactPage.number}</Text>
             </Button>
-            <Button onClick={() => copyContent()} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
+            <Button onClick={() => copyContent(contactPage.email)} px={5} py={7} bg={"--gold"} fontSize={"lg"} color={"white"} _hover={{pr: 10}} transition={"all 300ms ease-in-out"}>
               <IoMailOutline />
               <Text letterSpacing={"1px"}>{contactPage.email}</Text>
             </Button>
@@ -97,16 +156,16 @@ const Contact = () => {
           <VStack p={4} w={{base: "95%", lg: "60%"}} bg={"--black"} align={"start"}>
             <HStack w={"100%"} wrap={{base: "wrap", lg: "nowrap"}}>
             <Field w={{base: "100%", lg: "50%"}} label="Name" errorText="No name has been entered">
-                <Input bg={"--white"} borderRadius={0} color={"black"} type="text" placeholder="John Doe" />
+                <Input bg={"--white"} value={name} onChange={(e) => setName(e.target.value)} borderRadius={0} color={"black"} type="text" placeholder="John Doe" />
               </Field>
               <Field w={{base: "100%", lg: "50%"}} label="Email"  errorText="This is not a valid email">
-                <Input bg={"--white"} borderRadius={0} color={"black"} type="email" placeholder="me@example.com" />
+                <Input bg={"--white"} value={email} onChange={(e) => setEmail(e.target.value)} borderRadius={0} color={"black"} type="email" placeholder="me@example.com" />
               </Field>
             </HStack>
             <Field w={"100%"} label="Message"  errorText="No message has been entered">
-              <Textarea bg={"--white"} borderRadius={0} color={"black"} h={"15em"} placeholder="Enter message..." />
+              <Textarea bg={"--white"} value={message} onChange={(e) => setMessage(e.target.value)} borderRadius={0} color={"black"} h={"15em"} placeholder="Enter message..." />
             </Field>
-            <Button w={"100%"} py={5} mt={2} bg={"--gold"} fontSize={"lg"} _hover={{opacity: 0.8}} color={"white"}>Send Message</Button>
+            <Button onClick={() => handleFormSubmit()} loading={formLoading} disabled={formLoading} w={"100%"} py={5} mt={2} bg={"--gold"} fontSize={"lg"} _hover={{opacity: 0.8}} color={"white"}>Send Message</Button>
           </VStack>
         </HStack>
         <Footer/>

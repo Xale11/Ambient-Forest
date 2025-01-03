@@ -55,7 +55,7 @@ const OurStory = () => {
         <link rel="canonical" href={`${canonicalUrl}/ourStory`} />
       </Helmet>
 
-      <VStack w={"100vw"} gap={5} >
+      <VStack w={"100vw"} gap={5}>
         <Navbar/>
         <VStack h={{base: "auto", xl: "70vh"}} w={"100%"} pb={10} pt={{base: "7.5em", lg: "10em", xl: "13em"}} gap={3} bg={`url(${ourStoryImage}), rgba(0, 0, 0, 0.4)`} bgSize={"cover"} bgPos={"center"} bgBlendMode={"overlay"} bgRepeat={"no-repeat"}>
           <Heading size={{base: "3xl", xl: "5xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={"--white"}>Our Story</Heading>
