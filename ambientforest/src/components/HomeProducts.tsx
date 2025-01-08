@@ -11,7 +11,7 @@ interface Props {
 
 const HomeProducts = ({ title, bannerProducts }: Props) => {
 
-  const baseImageUrl = import.meta.env.VITE_S3_URL
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
 
   const slideSpeed = 3500
   

@@ -23,7 +23,7 @@ const ProductPageItem = ({product}: Props) => {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   
-  const baseImageUrl = import.meta.env.VITE_S3_URL
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
   
   const [displayImage, setDisplayImage] = useState<string>(`${baseImageUrl}/${product?.mainImageUrl}`)
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)

@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_CLOUDFRONT_URL: string
   readonly VITE_STRIPE_SECRET: string
   readonly VITE_DOMAIN: string
+  readonly VITE_USE_CLOUDFRONT?: "true" | "false"
   // more env variables...
 }
 

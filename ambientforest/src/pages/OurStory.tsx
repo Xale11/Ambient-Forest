@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet"
 
 const OurStory = () => {
 
-  const baseImageUrl = import.meta.env.VITE_S3_URL
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
   const canonicalUrl = import.meta.env.VITE_DOMAIN
 
   const [ourStoryPage, setOurStoryPage] = useState<OurStoryPageData>({

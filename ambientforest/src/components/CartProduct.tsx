@@ -18,7 +18,7 @@ const CartProduct = ({item, key}: Props) => {
 
   const quantityArray: number[] = new Array(maxCartItems).fill(0)
 
-  const baseImageUrl = import.meta.env.VITE_S3_URL
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
 
   return (
     <HStack position={"relative"} w={"100%"} key={key} h={"13em"} border={"1px solid #AD974F"}>

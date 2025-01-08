@@ -1,4 +1,4 @@
-import { Heading, HStack, Icon, Image, Text, VStack } from "@chakra-ui/react"
+import { Heading, HStack, Icon, Image, Spacer, Text, VStack } from "@chakra-ui/react"
 import Navbar from "../components/Navbar"
 import paymentOptions from "../assets/paymentOptions.png"
 import { Link } from "react-router-dom"
@@ -39,7 +39,7 @@ const Cart = () => {
         <meta name="author" content="Ambient Forest Candles" />
         <link rel="canonical" href={`${canonicalUrl}/cart`} />
       </Helmet>
-      <VStack w={"100vw"}>
+      <VStack w={"100vw"} minH={"100vh"}>
         <Navbar/>
         <HStack w={"100%"} mt={{base: "6em", lg: "10em"}} gap={7} justify={"center"} align={"start"} mb={5} wrap={"wrap-reverse"}>
 
@@ -49,7 +49,6 @@ const Cart = () => {
               return (<CartProduct item={item} key={i}/>)
             })}
           </VStack>
-
           <VStack w={{base: "85%", md: "40%", xl: "20%"}}>
             <Heading w={"100%"} size={"3xl"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"} pb={2} borderBottom={"1px solid #AD974F"}>Summary</Heading>
             <VStack w={"100%"} align={"start"} gap={0} pb={2} borderBottom={"1px solid #AD974F"}>
@@ -71,8 +70,8 @@ const Cart = () => {
             </Link>
             <Image w={"100%"} objectFit={"contain"} src={paymentOptions} alt="Image of payment options"/>
           </VStack>
-
         </HStack>
+        {cart.length === 0 && <Spacer/>}
         <Footer/>
       </VStack>
     </>

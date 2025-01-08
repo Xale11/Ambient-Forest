@@ -8,6 +8,8 @@ import Shop from "./pages/Shop";
 import Success from "./pages/Success";
 import Terms from "./pages/Terms";
 
+// UPDATE ROBOT.XML & VITE-SITEMAP-PLUGIN WITH ANY CHANGES!!!
+
 export const routes = [
   {
     path: "/",
@@ -46,3 +48,5 @@ export const routes = [
     element: <Cancel/>
   },
 ]
+
+// UPDATE ROBOT.XML & VITE-SITEMAP-PLUGIN WITH ANY CHANGES!!!

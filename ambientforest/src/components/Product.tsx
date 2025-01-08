@@ -19,7 +19,7 @@ const Product = ({product}: Props ) => {
 
   const { addToBag, cartPage } = useContext(ContextAPI) as ContextData
 
-  const baseImageUrl = import.meta.env.VITE_S3_URL
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
 
   const handleBuyNow = async () => {
     const cartItem: CartItem = convertProductToCartItem(product)
