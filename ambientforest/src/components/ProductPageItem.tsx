@@ -83,7 +83,7 @@ const ProductPageItem = ({product}: Props) => {
   console.log(currentImageIndex)
 
   return (
-    <HStack w={"90%"} h={{base: "unset", lg: "calc(100vh - 11em)"}} border={"1px solid #AD974F"} wrap={{base: "wrap", lg: "nowrap"}} >
+    <HStack w={"90%"} h={{base: "unset", lg: "calc(100vh - 11em)"}} border={"1px solid #AD974F"} pb={5} wrap={{base: "wrap", lg: "nowrap"}} >
           
       <VStack position={"relative"} h={{base: "unset", lg: "100%"}} w={{base: "100%", lg: "50%"}} overflowY={"hidden"}>
         {product?.isSoldOut && <Box top={0} right={35} fontSize={"lg"} bg={"--black"} position={"absolute"} py={1.5} px={4}>Sold Out</Box>}
@@ -144,18 +144,18 @@ const ProductPageItem = ({product}: Props) => {
             {`${limitText(product?.description, 275)}`}
             <Button onClick={() => setIsModalOpen(true)} ml={2} py={0} letterSpacing={"1px"} h={"min-content"} fontSize={"xs"} color={"white"} bg={"--black"} _hover={{px: 6}} transition={"all 300ms ease-in-out"}>More Info</Button>
           </Text>
-          <ProductColorNotes w={"40%"} h={"10em"} fontSize={"md"} product={product}/>
-          <VStack w={"60%"} textAlign={"center"} fontSize={"sm"} mb={2} display={{base: "flex", lg: "none"}}>
+          {product?.productType !== "giftset" && <ProductColorNotes w={"40%"} h={"10em"} fontSize={"md"} product={product}/>}
+          {product?.productType !== "giftset" && <VStack w={"60%"} textAlign={"center"} fontSize={"sm"} mb={2} display={{base: "flex", lg: "none"}}>
             <Text fontFamily={"Novecento"} color={"black"}>
-              Top notes: Citrus, Pear, Armoise
+              Top notes: {product?.notes?.topNotes?.content}
             </Text>
             <Text fontFamily={"Novecento"} color={"black"}>
-              Heart notes: Amber, Lavender, Jasmine
+              Heart notes: {product?.notes?.heartNotes?.content}
             </Text>
             <Text fontFamily={"Novecento"} color={"black"}>
-              Base notes: Sandalwood, Musk, Vanilla
+             Base notes: {product?.notes?.baseNotes?.content}
             </Text>
-          </VStack>
+          </VStack>}
         </HStack>
 
         {/* Desktop Button Group */}

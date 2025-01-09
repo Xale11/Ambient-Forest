@@ -40,7 +40,7 @@ const Product = ({product}: Props ) => {
           <Heading size={{base: "xl", xl: "2xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"} display={{base: "none", lg: "flex"}}>£{(parseInt(product?.price ?? "0") / 100).toFixed(2)}</Heading>
           <Text w={"100%"} mt={{base: 1, xl: 7}} color={"black"} textAlign={"center"} fontSize={"sm"}>{`${limitText(product?.description, 175)}`}</Text>
         </VStack>
-        <ProductColorNotes product={product}/>
+        {product?.productType !== "giftset" && <ProductColorNotes product={product}/>}
         <VStack w={{base: "45%", sm: "30%", lg: "20%"}} aspectRatio={{base: "1/1", lg: "auto"}} justify={"center"}>
           <Heading display={{base: "block", lg: "none"}} size={"xl"} letterSpacing={"1px"} fontFamily={"Nazare"} color={"black"} textAlign={"center"}>{product?.name}</Heading>
           <Heading display={{base: "block", lg: "none"}} size={"lg"} letterSpacing={"1px"} fontFamily={"Novecento"} color={"black"}>£{(parseInt(product?.price ?? "0") / 100).toFixed(2)}</Heading>
