@@ -1,6 +1,5 @@
 import { HStack, Spacer, VStack } from "@chakra-ui/react"
 import Navbar from "../components/Navbar"
-import homeCandle from "../assets/homeCandle.png"
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import HomeBanner from "../components/HomeBanner"
@@ -15,9 +14,12 @@ import { Helmet } from "react-helmet"
 const Home = () => {
 
   const canonicalUrl = import.meta.env.VITE_DOMAIN
+  const baseImageUrl = import.meta.env.VITE_USE_CLOUDFRONT === "true" ? import.meta.env.VITE_CLOUDFRONT_URL : import.meta.env.VITE_S3_URL
+
 
 const [homePage, setHomePage] = useState<HomePageData>({
   page: "home",
+  mainImgUrl: `homePageMainImage`,
   bannerMessages: { msg1: "", msg2: "", msg3: "", msg4: ""},
   productBanner: {
     candle: {},
@@ -55,6 +57,8 @@ const [homePage, setHomePage] = useState<HomePageData>({
     .filter((msg) => msg) // Ensure no undefined messages
     .join(' '); // Combine for a better meta description
 
+  console.log(`${baseImageUrl}/${homePage.mainImgUrl}`)
+
   return (
     <>
       <Helmet>
@@ -78,7 +82,7 @@ const [homePage, setHomePage] = useState<HomePageData>({
         )}
       </Helmet>
       <VStack w={"100%"} gap={0}>
-        <VStack h={"100vh"} w={"100%"} bg={`url(${homeCandle}), rgba(0, 0, 0, 0.0)`} bgSize={"cover"} bgPos={"center"} bgBlendMode={"overlay"} bgRepeat={"no-repeat"}>
+        <VStack h={"100vh"} w={"100%"} bg={`url(${baseImageUrl}/${homePage.mainImgUrl}?t=${Date.now()}), rgba(0, 0, 0, 0.0)`} bgSize={"cover"} bgPos={"center"} bgBlendMode={"overlay"} bgRepeat={"no-repeat"}>
           <Navbar/>
           <Spacer/>
           <Link style={{marginBottom: "3.5em"}} to={`/shop/candle`}>

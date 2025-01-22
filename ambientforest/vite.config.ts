@@ -18,7 +18,7 @@ export default defineConfig({
   plugins: [
     react(),
     Sitemap({
-      hostname: 'https://yourwebsite.com', // Replace with your actual domain
+      hostname: 'https://ambientforest.co.uk', // Replace with your actual domain
       dynamicRoutes: [...staticRoutes, ...dynamicRoutes], // Add the dynamic routes function here
       exclude: ['/cart', '/cancel', '/success'], // Add any routes you want to exclude
       generateRobotsTxt: true, // Automatically generates robots.txt
