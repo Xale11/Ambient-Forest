@@ -90,6 +90,9 @@ const Footer = () => {
             <Link to={"/contact"}>Contact</Link>
           </Text>
           <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
+            <Link to={"/fragrance"}>Fragrances</Link>
+          </Text>
+          <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>
             <Link to={"/cart"}>Cart</Link>
           </Text>
           <Text _hover={{color: "--gold"}} fontSize={{base: "xs", lg: "md"}}>

@@ -22,9 +22,9 @@ const [homePage, setHomePage] = useState<HomePageData>({
   mainImgUrl: `homePageMainImage`,
   bannerMessages: { msg1: "", msg2: "", msg3: "", msg4: ""},
   productBanner: {
-    candle: {},
-    giftset: {},
-    tealight: {}
+    candle: undefined,
+    giftset: undefined,
+    tealight: undefined
   }
 })
 
@@ -46,7 +46,7 @@ const [homePage, setHomePage] = useState<HomePageData>({
 
   // for seo
 
-  const candle = homePage.productBanner?.candle?.spring;
+  const candle = homePage.productBanner?.candle;
 
   const seoBannerText = [
     homePage?.bannerMessages.msg1,
@@ -85,15 +85,21 @@ const [homePage, setHomePage] = useState<HomePageData>({
         <VStack h={"100vh"} w={"100%"} bg={`url(${baseImageUrl}/${homePage.mainImgUrl}?t=${Date.now()}), rgba(0, 0, 0, 0.0)`} bgSize={"cover"} bgPos={"center"} bgBlendMode={"overlay"} bgRepeat={"no-repeat"}>
           <Navbar/>
           <Spacer/>
-          <Link style={{marginBottom: "3.5em"}} to={`/shop/candle`}>
-            <Button size={"lg"} fontSize={"2xl"} px={"2em"} _hover={{px: "3em"}} transition={"all 300ms ease-in-out"} bg={"--black"} color={"white"} letterSpacing={"2px"}>SHOP NOW</Button>
-          </Link>
+          <VStack>
+            <Link to={`/shop/candle`}>
+              <Button size={"lg"} fontSize={"2xl"} px={"2em"} _hover={{px: "3em"}} transition={"all 300ms ease-in-out"} bg={"--black"} color={"white"} letterSpacing={"2px"}>SHOP NOW</Button>
+            </Link>
+            <Link style={{marginBottom: "3.5em"}} to={`/fragrance`}>
+              <Button size={"lg"} fontSize={"2xl"} px={"2em"} _hover={{px: "3em"}} transition={"all 300ms ease-in-out"} bg={"--gold"} color={"white"} letterSpacing={"2px"}>FIND A FRAGRANCE</Button>
+            </Link>
+          </VStack>
+          
         </VStack>
         <HomeBanner bannerMessages={homePage?.bannerMessages}/>
         <HStack w={"100%"} justify={"center"} gap={{base: 3, lg: 16}} my={5}>
-          <HomeProducts title="Candles" bannerProducts={homePage.productBanner?.candle}/>
-          <HomeProducts title="Tealights" bannerProducts={homePage.productBanner?.tealight}/>
-          <HomeProducts title="Giftsets" bannerProducts={homePage.productBanner?.giftset}/>
+          <HomeProducts title="Candles" productType="candle" bannerProduct={homePage.productBanner?.candle}/>
+          <HomeProducts title="Tealights" productType="tealight" bannerProduct={homePage.productBanner?.tealight}/>
+          <HomeProducts title="Giftsets" productType="giftset" bannerProduct={homePage.productBanner?.giftset}/>
         </HStack>
         <Footer/>
       </VStack>

@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar"
 import { FaChevronDown } from "react-icons/fa"
 import Product from "../components/Product"
 import Footer from "../components/Footer"
-import { useNavigate, useParams, useSearchParams, } from "react-router-dom"
+import { Link, useNavigate, useParams, useSearchParams, } from "react-router-dom"
 import { getProductsByTypeFromDynamoDB } from "../api/awsApi"
 import { Product as ProductType } from "../types/types"
 import { useEffect, useState } from "react"
@@ -16,7 +16,7 @@ const Shop = () => {
 
   const navigate = useNavigate()
   const { type } = useParams()
-  const [ params ] = useSearchParams()
+  const [ params, setParams ] = useSearchParams()
 
 
   const checkSeasonQueryParam = () => {
@@ -59,14 +59,18 @@ const Shop = () => {
         />
         <meta property="og:title" content={`${type}s - Ambient Forest Candles`} />
         <meta property="og:description" content={`Shop for ${type}s from Ambient Forest Candles, locally produced luxury candles inspired by the Peak District.`} />
-        <meta property="og:image" content="URL_TO_IMAGE" />
-        <meta property="og:url" content="URL_OF_THE_SHOP_PAGE" />
+        <meta property="og:url" content={window.location.href} />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Ambient Forest Candles" />
       </Helmet>
 
       <VStack pos={"relative"} w={"100vw"} minH={"100vh"}>
         <Navbar/>
+        <Text position={"absolute"} color={"--black"} top={{base: "5em", lg: "9em"}} left={5}>
+          <Link to={`/shop/candle`} style={{fontSize: "0.75em", textDecoration: "underline", whiteSpace: "pre-wrap", lineHeight: "-5"}}>
+            {"Find the perfect \ncandle fragrance"}
+          </Link>
+        </Text>
         <MenuRoot positioning={{placement: "bottom"}}>
           <MenuTrigger _focus={{outline: "none", border: "none"}}>
           <HStack  gap={5} mt={{base: "6em", lg: "10em"}} align={"center"} justify={"center"}>
@@ -89,10 +93,10 @@ const Shop = () => {
           </MenuContent>
         </MenuRoot>
         <HStack mt={5} w={"100%"} justify={"center"} gap={{base: 4, lg: "10em"}} wrap={"wrap"}>
-          <Heading onClick={() => setFilter("spring")} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "spring" ? "--gold" : "black"} textDecor={filter === "spring" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Spring</Heading>
-          <Heading onClick={() => setFilter("summer")} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "summer" ? "--gold" : "black"} textDecor={filter === "summer" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Summer</Heading>
-          <Heading onClick={() => setFilter("autumn")} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "autumn" ? "--gold" : "black"} textDecor={filter === "autumn" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Autumn</Heading>
-          <Heading onClick={() => setFilter("winter")} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "winter" ? "--gold" : "black"} textDecor={filter === "winter" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Winter</Heading>
+          <Heading onClick={() => {setFilter("spring"); setParams({"season": "spring"})}} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "spring" ? "--gold" : "black"} textDecor={filter === "spring" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Spring</Heading>
+          <Heading onClick={() => {setFilter("summer"); setParams({"season": "summer"})}} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "summer" ? "--gold" : "black"} textDecor={filter === "summer" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Summer</Heading>
+          <Heading onClick={() => {setFilter("autumn"); setParams({"season": "autumn"})}} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "autumn" ? "--gold" : "black"} textDecor={filter === "autumn" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Autumn</Heading>
+          <Heading onClick={() => {setFilter("winter"); setParams({"season": "winter"})}} size={{base: "sm", lg: "3xl"}} letterSpacing={"1px"} fontFamily={"Novecento"} color={ filter === "winter" ? "--gold" : "black"} textDecor={filter === "winter" ? "underline" : "unset"} _hover={{color: "--gold", textDecor: "underline", cursor: "pointer"}}>Winter</Heading>
         </HStack>
         <VStack w={"100%"} my={10} gap={5}>
           {products.map((product, i) => {

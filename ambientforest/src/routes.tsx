@@ -1,6 +1,7 @@
 import Cancel from "./pages/Cancel";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
+import Fragrances from "./pages/Fragrances";
 import Home from "./pages/Home";
 import OurStory from "./pages/OurStory";
 import ProductPage from "./pages/ProductPage";
@@ -38,6 +39,10 @@ export const routes = [
   {
     path: "/product/:type/:id",
     element: <ProductPage/>
+  },
+  {
+    path: "/fragrance",
+    element: <Fragrances/>
   },
   {
     path: "/success",

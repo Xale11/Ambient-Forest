@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 const Logo = () => {
   return (
-    <VStack gap={0}>
+    <VStack gap={0} scale={{base: 1, lg: 1.25}}>
       <Heading as={"h1"} fontFamily={"Nazare"} size={"4xl"} letterSpacing={-9}>
         <Link to={"/"}>AF</Link>
       </Heading>
