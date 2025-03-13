@@ -8,7 +8,6 @@ interface Props {
 }
 
 const FragranceTable = ({products}: Props) => {
-  console.log(products)
   return (
     <Table.Root size={{base: "sm", md: "md"}} w={"90%"} bg={"--black"}>
       <Table.Header>

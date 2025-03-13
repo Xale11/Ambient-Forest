@@ -80,8 +80,6 @@ const ProductPageItem = ({product}: Props) => {
     generateImageArray()
   }, [product, baseImageUrl])
 
-  console.log(currentImageIndex)
-
   return (
     <HStack w={"90%"} h={{base: "unset", lg: "calc(100vh - 11em)"}} border={"1px solid #AD974F"} pb={5} wrap={{base: "wrap", lg: "nowrap"}} >
           

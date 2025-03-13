@@ -57,8 +57,6 @@ const [homePage, setHomePage] = useState<HomePageData>({
     .filter((msg) => msg) // Ensure no undefined messages
     .join(' '); // Combine for a better meta description
 
-  console.log(`${baseImageUrl}/${homePage.mainImgUrl}`)
-
   return (
     <>
       <Helmet>
