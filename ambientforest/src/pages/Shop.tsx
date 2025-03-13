@@ -67,7 +67,7 @@ const Shop = () => {
       <VStack pos={"relative"} w={"100vw"} minH={"100vh"}>
         <Navbar/>
         <Text position={"absolute"} color={"--black"} top={{base: "5em", lg: "9em"}} left={5}>
-          <Link to={`/shop/candle`} style={{fontSize: "0.75em", textDecoration: "underline", whiteSpace: "pre-wrap", lineHeight: "-5"}}>
+          <Link to={`/fragrance`} style={{fontSize: "0.75em", textDecoration: "underline", whiteSpace: "pre-wrap", lineHeight: "-5"}}>
             {"Find the perfect \ncandle fragrance"}
           </Link>
         </Text>
