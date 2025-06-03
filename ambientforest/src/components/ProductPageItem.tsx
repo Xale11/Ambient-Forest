@@ -71,6 +71,7 @@ const ProductPageItem = ({product}: Props) => {
     const cartItem: CartItem = convertProductToCartItem(product)
     const shippingRates: ShippingRate[] = [...cartPage.deliveryOptions].map((option) => convertDeliveryOptionToShippingRate(option))
     const url = await goToCheckout([cartItem.lineItem], shippingRates)
+    if (!url) return
     window.open(url, "_self")
   }
 
